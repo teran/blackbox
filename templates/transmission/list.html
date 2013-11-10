@@ -29,6 +29,24 @@
             </div>
         </form>
     </div>
+    <div class="modal fade" id="torrentInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Torrent info</h4>
+                </div>
+                <div class="modal-body torrent-info-modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary add-torrent-submit">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="torrent-list-container">
         <div class="loading-image">
             <img class="loading-image" src="{% static 'images/loading.gif' %}" />

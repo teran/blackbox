@@ -1,6 +1,10 @@
 $(document).ready(function() {
     $(document).on('click', '.torrent-list-item', function(e) {
-        alert($(this).html());
+        var id = $(this).attr('data-id');
+        $('.torrent-info-modal-body').html(
+            'LOL'
+        );
+        $('#torrentInfoModal').modal('show');
     });
     $(document).on('click', '.add-torrent-button', function(e) {
         $('#addTorrentModal').modal('show');

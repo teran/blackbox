@@ -42,20 +42,11 @@ def api_add_torrent(request):
         )
 
 def api_action(request, id, action):
-    if request.method == 'POST':
-        tc = transmissionrpc.Client(
-            settings.TRANSMISSION['default']['HOST'],
-            port=settings.TRANSMISSION['default']['PORT'],
-            user=settings.TRANSMISSION['default']['USER'],
-            password=settings.TRANSMISSION['default']['PASSWORD'])
-    else:
-        return HttpResponseBadRequest(
-            content=dumps({
-                'status': 'error',
-                'reason': 'Request method should be POST'
-            }), content_type='application/json'
-        )
-
+    tc = transmissionrpc.Client(
+        settings.TRANSMISSION['default']['HOST'],
+        port=settings.TRANSMISSION['default']['PORT'],
+        user=settings.TRANSMISSION['default']['USER'],
+        password=settings.TRANSMISSION['default']['PASSWORD'])
 
     torrent = tc.get_torrent(torrent_id=id)
 
@@ -65,6 +56,21 @@ def api_action(request, id, action):
         tc.start_torrent(torrent.id)
     elif action == 'stop':
         tc.stop_torrent(torrent.id)
+    elif action == 'info':
+        files = torrent.files()
+        ofiles = []
+        for f in files:
+            ofiles.append('%s/%s' % (settings.SHARE_PATH, files[f]['name']))
+
+        return HttpResponse(
+            content=dumps({
+                'id': torrent.id,
+                'name': torrent.name,
+                'status': torrent.status,
+                'progress': torrent.progress,
+                'files': sorted(ofiles)
+            })
+        )
     else:
         return HttpResponseBadRequest(
             content=dumps({
@@ -72,6 +78,11 @@ def api_action(request, id, action):
                 'reason': 'No such method %s' % action
             }), content_type='application/json'
         )
+    return HttpResponse(
+        content=dumps({
+            'status': 'ok'
+        }), content_type='application/json'
+    )
 
 def api_list(request):
     tc = transmissionrpc.Client(
