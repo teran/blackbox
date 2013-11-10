@@ -1,16 +1,16 @@
-$('document').ready(function() {
+$(document).ready(function() {
     setInterval(function() {
         $.getJSON('/api/transmission/list.json', function(data) {
             items = [];
             $.each( data, function( key, val ) {
                 items.push(
                     '<li class="torrent-list-item">' +
-                        '<a href="#">' + val.name +
-                        '<div class="progress progress-striped">' +
+                        val.name +
+                        '<div class="progress">' +
                             '<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: '+val.progress+'%">' +
-                                val.progress + '% complete' +
+                                Math.round(val.progress) + '% complete' +
                             '</div>' +
-                        '</div></a>'+
+                        '</div>' +
                     '</li>'
                 );
             });
@@ -21,4 +21,8 @@ $('document').ready(function() {
             }));
         })
     }, 1000);
+
+    $(document).on('click', '.torrent-list-item', function(e) {
+        alert($(this).html());
+    });
 });

@@ -10,7 +10,15 @@ li.torrent-list-item {
     margin-right: 10px;
     height: 50px;
     color: #777777;
+    cursor: pointer;
 }
 div.loading-image {
     text-align: center;
+}
+.progress-bar {
+    background-color: #2a6496;
+    color: #000000;
+}
+.torrent-meta-info {
+    padding-left: 30px;
 }
