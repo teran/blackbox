@@ -4,9 +4,6 @@
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
         <link rel="stylesheet" href="{% static 'css/layout.css' %}" />
-        <script>
-            var LOG_LEVEL = 'DEBUG';
-        </script>
     </head>
     <body>
         <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
@@ -24,7 +21,7 @@
                 </div>
                 <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                     <ul class="nav navbar-nav">
-                        <li><a href="/">Transmission</a></li>
+                        <li{% if nav == 'transmission' %} class="active"{% endif %}><a href="/">Transmission</a></li>
                         <li><a href="/share/">HTTP Share</a></li>
                         <li><a href="#">Stub #1</a></li>
                         <li><a href="#">Stub #2</a></li>

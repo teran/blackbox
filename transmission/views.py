@@ -26,5 +26,5 @@ def api_list(request):
 def index(request):
     return render_to_response(
         'transmission/list.html',
-        {},
+        {'nav': 'transmission'},
         context_instance=RequestContext(request))
