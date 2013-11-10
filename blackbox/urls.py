@@ -7,7 +7,10 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns(
     '',
     (r'^$', 'transmission.views.index'),
-    (r'api\/transmission\/list.json', 'transmission.views.api_list'),
+    (r'^api\/transmission\/list.json$', 'transmission.views.api_list'),
+    (r'^api\/transmission\/add$', 'transmission.views.api_add_torrent'),
+    (r'^api\/transmission\/(?P<id>[0-9]+)\/(?P<action>start|stop|delete|pause)$', 'transmission.views.api_action'),
+
     # Examples:
     # url(r'^$', 'blackbox.views.home', name='home'),
     # url(r'^blackbox/', include('blackbox.foo.urls')),

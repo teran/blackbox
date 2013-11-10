@@ -9,7 +9,8 @@
 
 {% block content %}
     <div class="modal fade" id="addTorrentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="/api/torrent/add" method="post" enctype="application/x-www-form-urlencoded" id="add-torrent-form">
+        <form action="/api/transmission/add" method="post" enctype="multipart/form-data" id="add-torrent-form">
+            {% csrf_token %}
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
