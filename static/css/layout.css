@@ -22,3 +22,10 @@ div.loading-image {
 .torrent-meta-info {
     padding-left: 30px;
 }
+.torrent-urls {
+    width: 100%;
+    height: 100px;
+}
+.transmission-meta {
+    padding: 10px;
+}
