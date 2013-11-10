@@ -11,3 +11,6 @@ li.torrent-list-item {
     height: 50px;
     color: #777777;
 }
+div.loading-image {
+    text-align: center;
+}

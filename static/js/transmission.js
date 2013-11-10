@@ -5,12 +5,12 @@ $('document').ready(function() {
             $.each( data, function( key, val ) {
                 items.push(
                     '<li class="torrent-list-item">' +
-                        val.name +
+                        '<a href="#">' + val.name +
                         '<div class="progress progress-striped">' +
                             '<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: '+val.progress+'%">' +
                                 val.progress + '% complete' +
                             '</div>' +
-                        '</div>'+
+                        '</div></a>'+
                     '</li>'
                 );
             });
