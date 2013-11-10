@@ -21,8 +21,4 @@ $(document).ready(function() {
             }));
         })
     }, 1000);
-
-    $(document).on('click', '.torrent-list-item', function(e) {
-        alert($(this).html());
-    });
 });
