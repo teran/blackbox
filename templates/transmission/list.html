@@ -1,0 +1,12 @@
+{% extends 'common/boilerplate.html' %}
+{% load staticfiles %}
+
+{% block title %}Index{% endblock %}
+
+{% block load %}
+        <script src="{% static 'js/transmission.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="torrent-list-container"></div>
+{% endblock %}

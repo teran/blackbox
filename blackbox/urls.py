@@ -4,7 +4,10 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
+    (r'^$', 'transmission.views.index'),
+    (r'api\/transmission\/list.json', 'transmission.views.api_list'),
     # Examples:
     # url(r'^$', 'blackbox.views.home', name='home'),
     # url(r'^blackbox/', include('blackbox.foo.urls')),
