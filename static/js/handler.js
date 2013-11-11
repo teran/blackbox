@@ -12,7 +12,8 @@ $(document).ready(function() {
             ];
             var files = ['<ul class="torrent-info-list">']
             $.each(data.files, function(key, val) {
-                files.push('<li class="torrent-info-item"><a href="'+val+'">'+val+'<a></li>');
+                fn = val.split('/');
+                files.push('<li class="torrent-info-item"><a href="'+val+'">'+fn[fn.length-1]+'<a></li>');
             });
             files.push('</ul>');
             $('.torrent-info-modal-body').html(items.join('')+files.join(''));
