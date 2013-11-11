@@ -6,14 +6,18 @@ $(document).ready(function() {
                 '<p>Name: '+data.name+'</p>',
                 '<p>Status: '+data.status+'</p>',
                 '<p>Actions: ' +
-                    '<span class="glyphicon glyphicon-trash"></span> ' +
-                    '<span class="glyphicon glyphicon-play"></span> ' +
-                    '<span class="glyphicon glyphicon-stop"></span> '
+                    '<a href="#" class="torrent-delete-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-trash"></span></a> ' +
+                    '<a href="#" class="torrent-resume-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-play"></span></a> ' +
+                    '<a href="#" class="torrent-stop-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-stop"></span></a> '
             ];
             var files = ['<ul class="torrent-info-list">']
             $.each(data.files, function(key, val) {
                 fn = val.split('/');
-                files.push('<li class="torrent-info-item"><a href="'+val+'">'+fn[fn.length-1]+'<a></li>');
+                if(data.progress == 100) {
+                    files.push('<li class="torrent-info-item"><a href="'+val+'">'+fn[fn.length-1]+'<a></li>');
+                } else {
+                    files.push('<li class="torrent-info-item">'+fn[fn.length-1]+'</li>');
+                }
             });
             files.push('</ul>');
             $('.torrent-info-modal-body').html(items.join('')+files.join(''));
@@ -25,5 +29,14 @@ $(document).ready(function() {
     });
     $('.add-torrent-submit').click(function() {
         $('#add-torrent-form').submit();
+    });
+    $('.torrent-delete-button').click(function(e) {
+        e.preventDefault();
+    });
+    $('.torrent-resume-button').click(function(e) {
+        e.preventDefault();
+    });
+    $('.torrent-stop-button').click(function(e) {
+        e.preventDefault();
     });
 });
