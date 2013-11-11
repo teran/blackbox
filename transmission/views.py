@@ -14,23 +14,26 @@ from transmission.models import Torrent, Group
 
 def api_add_torrent(request):
     if request.method == 'POST':
-        with tempfile.NamedTemporaryFile('w+b', delete=False) as fp:
-            f = request.FILES.get('torrent')
-            tf = fp.name
-            for chunk in f.chunks():
-                fp.write(chunk)
-
         tc = transmissionrpc.Client(
             settings.TRANSMISSION['default']['HOST'],
             port=settings.TRANSMISSION['default']['PORT'],
             user=settings.TRANSMISSION['default']['USER'],
             password=settings.TRANSMISSION['default']['PASSWORD'])
+        if 'torrent' in request.FILES:
+            with tempfile.NamedTemporaryFile('w+b', delete=False) as fp:
+                f = request.FILES.get('torrent')
+                tf = fp.name
+                for chunk in f.chunks():
+                    fp.write(chunk)
 
-        fp.close()
-        fp = open(tf, 'r')
-        tc.add_torrent(b64encode(fp.read()))
-        fp.close()
-        unlink(tf)
+            fp.close()
+            fp = open(tf, 'r')
+            tc.add_torrent(b64encode(fp.read()))
+            fp.close()
+            unlink(tf)
+        else:
+            for url in request.POST['torrentUrls'].split("\n"):
+                tc.add_torrent(url)
 
         return redirect('/')
     else:
@@ -52,7 +55,7 @@ def api_action(request, id, action):
     torrent = tc.get_torrent(torrent_id=id)
 
     if action == 'delete':
-        tc.remove_torrent(torrent.id)
+        tc.remove_torrent(torrent.id, delete_data=True)
     elif action == 'start':
         tc.start_torrent(torrent.id)
     elif action == 'stop':
@@ -69,9 +72,12 @@ def api_action(request, id, action):
                 'name': torrent.name,
                 'status': torrent.status,
                 'progress': torrent.progress,
+                'magnetLink': torrent.magnetLink,
                 'files': sorted(ofiles)
             })
         )
+    elif action == 'verify':
+        tc.verify_torrent(torrent.id)
     else:
         return HttpResponseBadRequest(
             content=dumps({
@@ -97,7 +103,8 @@ def api_list(request):
             'id': x.id,
             'name': x.name,
             'status': x.status,
-            'progress': x.progress
+            'progress': x.progress,
+            'recheckProgress': x.recheckProgress,
         } for x in tc.get_torrents()]),
         content_type='application/json'
     )

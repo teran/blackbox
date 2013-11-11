@@ -5,10 +5,12 @@ $(document).ready(function() {
             items = [
                 '<p>Name: '+data.name+'</p>',
                 '<p>Status: '+data.status+'</p>',
+                '<p>Magnet: '+'<input type="text" class="max-width" value="'+data.magnetLink+'" /></p>',
                 '<p>Actions: ' +
                     '<a href="#" class="torrent-delete-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-trash"></span></a> ' +
                     '<a href="#" class="torrent-resume-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-play"></span></a> ' +
-                    '<a href="#" class="torrent-stop-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-stop"></span></a> '
+                    '<a href="#" class="torrent-stop-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-stop"></span></a> ' +
+                    '<a href="#" class="torrent-verify-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-check"></span></a> '
             ];
             var files = ['<ul class="torrent-info-list">']
             $.each(data.files, function(key, val) {
@@ -34,16 +36,40 @@ $(document).ready(function() {
         e.preventDefault();
         $.post('/api/transmission/'+$(this).attr('data-id')+'/delete', {})
             .done(function(){
-                alert('OK!');
+                $('#torrentInfoModal').modal('toggle');
             })
             .fail(function(){
                 alert('Error executing AJAX request!');
             });
     });
-    $('.torrent-resume-button').click(function(e) {
+    $(document).on('click', '.torrent-resume-button', function(e) {
         e.preventDefault();
+        $.post('/api/transmission/'+$(this).attr('data-id')+'/start', {})
+            .done(function(){
+                $('#torrentInfoModal').modal('toggle');
+            })
+            .fail(function(){
+                alert('Error executing AJAX request!');
+            });
     });
-    $('.torrent-stop-button').click(function(e) {
+    $(document).on('click', '.torrent-stop-button', function(e) {
         e.preventDefault();
+        $.post('/api/transmission/'+$(this).attr('data-id')+'/stop', {})
+            .done(function(){
+                $('#torrentInfoModal').modal('toggle');
+            })
+            .fail(function(){
+                alert('Error executing AJAX request!');
+            });
+    });
+    $(document).on('click', '.torrent-verify-button', function(e) {
+        e.preventDefault();
+        $.post('/api/transmission/'+$(this).attr('data-id')+'/verify', {})
+            .done(function(){
+                $('#torrentInfoModal').modal('toggle');
+            })
+            .fail(function(){
+                alert('Error executing AJAX request!');
+            });
     });
 });

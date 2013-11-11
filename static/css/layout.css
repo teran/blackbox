@@ -14,12 +14,29 @@ li.torrent-list-item {
     color: #777777;
     cursor: pointer;
 }
+.max-width {
+    width: 100%;
+}
 div.loading-image {
     text-align: center;
 }
+.progress {
+    height: 5px;
+}
 .progress-bar {
-    background-color: #2a6496;
     color: #000000;
+}
+.progress-bar-checking {
+    background-color: #a47e3c;
+}
+.progress-bar-default {
+    background-color: #2a6496;
+}
+.progress-bar-downloading {
+    background-color: #356635;
+}
+.progress-bar-stopped {
+    background-color: #5e5e5e;
 }
 .torrent-meta-info {
     padding-left: 30px;
