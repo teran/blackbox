@@ -41,6 +41,7 @@ def api_add_torrent(request):
             }), content_type='application/json'
         )
 
+@csrf_exempt
 def api_action(request, id, action):
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],

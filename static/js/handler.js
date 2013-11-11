@@ -30,8 +30,15 @@ $(document).ready(function() {
     $('.add-torrent-submit').click(function() {
         $('#add-torrent-form').submit();
     });
-    $('.torrent-delete-button').click(function(e) {
+    $(document).on('click', '.torrent-delete-button', function(e) {
         e.preventDefault();
+        $.post('/api/transmission/'+$(this).attr('data-id')+'/delete', {})
+            .done(function(){
+                alert('OK!');
+            })
+            .fail(function(){
+                alert('Error executing AJAX request!');
+            });
     });
     $('.torrent-resume-button').click(function(e) {
         e.preventDefault();
