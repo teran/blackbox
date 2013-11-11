@@ -104,7 +104,7 @@ def api_list(request):
             'name': x.name,
             'status': x.status,
             'progress': x.progress,
-            'recheckProgress': x.recheckProgress,
+            'recheckProgress': x.recheckProgress * 100,
         } for x in tc.get_torrents()]),
         content_type='application/json'
     )
