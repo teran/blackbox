@@ -100,6 +100,13 @@ def api_list(request):
 
     data = []
     for t in tc.get_torrents():
+        torrent, created = Torrent.objects.get_or_create(
+            tid=t.id,
+            name=t.name
+        )
+        if created:
+            torrent.save()
+
         data.append({
             'id': t.id,
             'name': t.name,

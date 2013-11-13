@@ -6,4 +6,5 @@ class Group(models.Model):
 
 class Torrent(models.Model):
     tid = models.IntegerField()
-    group = models.ForeignKey(Group, related_name='torrents')
+    name = models.CharField(max_length=255)
+    group = models.ForeignKey(Group, related_name='torrents', null=True, blank=True)
