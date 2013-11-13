@@ -1,14 +1,14 @@
 from django.conf import settings
-from django.shortcuts import HttpResponse, render_to_response, RequestContext, redirect
 from django.http import HttpResponseBadRequest
+from django.shortcuts import HttpResponse, render_to_response, RequestContext, redirect
+from django.views.decorators.csrf import csrf_exempt
 
-import transmissionrpc
-from json import dumps
-import tempfile
 from base64 import b64encode
 from os import unlink
+from json import dumps
 
-from django.views.decorators.csrf import csrf_exempt
+import transmissionrpc
+import tempfile
 
 from transmission.models import Torrent, Group
 
@@ -98,14 +98,18 @@ def api_list(request):
         user=settings.TRANSMISSION['default']['USER'],
         password=settings.TRANSMISSION['default']['PASSWORD'])
 
+    data = []
+    for t in tc.get_torrents():
+        data.append({
+            'id': t.id,
+            'name': t.name,
+            'status': t.status,
+            'progress': t.progress,
+            'recheckProgress': t.recheckProgress * 100,
+        })
+
     return HttpResponse(
-        content=dumps([{
-            'id': x.id,
-            'name': x.name,
-            'status': x.status,
-            'progress': x.progress,
-            'recheckProgress': x.recheckProgress * 100,
-        } for x in tc.get_torrents()]),
+        content=dumps(data),
         content_type='application/json'
     )
 
