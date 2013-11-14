@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponseBadRequest
-from django.shortcuts import HttpResponse, render_to_response, RequestContext, redirect
+from django.shortcuts import HttpResponse, render_to_response,\
+    RequestContext, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from base64 import b64encode
@@ -11,6 +12,7 @@ import transmissionrpc
 import tempfile
 
 from transmission.models import Torrent, Group
+
 
 def api_add_torrent(request):
     if request.method == 'POST':
@@ -43,6 +45,7 @@ def api_add_torrent(request):
                 'reason': 'Request method should be POST'
             }), content_type='application/json'
         )
+
 
 @csrf_exempt
 def api_action(request, id, action):
@@ -90,6 +93,7 @@ def api_action(request, id, action):
             'status': 'ok'
         }), content_type='application/json'
     )
+
 
 def api_list(request):
     tc = transmissionrpc.Client(
