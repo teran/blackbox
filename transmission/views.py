@@ -105,22 +105,30 @@ def api_list(request):
         user=settings.TRANSMISSION['default']['USER'],
         password=settings.TRANSMISSION['default']['PASSWORD'])
 
-    data = []
-    for t in tc.get_torrents():
+    rpclist = tc.get_torrents()
+    data = {}
+    for t in rpclist:
         torrent, created = Torrent.objects.get_or_create(
-            tid=t.id,
-            name=t.name
+            tid=t.id
         )
         if created:
+            torrent.name = t.name
             torrent.save()
 
-        data.append({
+        data[t.id] = {
             'id': t.id,
             'name': t.name,
             'status': t.status,
             'progress': t.progress,
             'recheckProgress': t.recheckProgress * 100,
-        })
+        }
+
+    for t in Torrent.objects.all():
+        try:
+            data[t.tid]['name'] = t.name
+        except KeyError:
+            t.delete()
+            del(data[t.tid])
 
     return HttpResponse(
         content=dumps(data),
