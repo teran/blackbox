@@ -21,6 +21,7 @@ def api_add_torrent(request):
             port=settings.TRANSMISSION['default']['PORT'],
             user=settings.TRANSMISSION['default']['USER'],
             password=settings.TRANSMISSION['default']['PASSWORD'])
+
         if 'torrent' in request.FILES:
             with tempfile.NamedTemporaryFile('w+b', delete=False) as fp:
                 f = request.FILES.get('torrent')
@@ -30,7 +31,9 @@ def api_add_torrent(request):
 
             fp.close()
             fp = open(tf, 'r')
+
             tc.add_torrent(b64encode(fp.read()))
+
             fp.close()
             unlink(tf)
         else:
