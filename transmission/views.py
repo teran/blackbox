@@ -62,9 +62,9 @@ def api_action(request, id, action):
         tc.stop_torrent(torrent.id)
     elif action == 'info':
         files = torrent.files()
-        ofiles = []
+        data = []
         for f in files:
-            ofiles.append('%s/%s' % (settings.SHARE_PATH, files[f]['name']))
+            data.append('%s/%s' % (settings.SHARE_PATH, files[f]['name']))
 
         return HttpResponse(
             content=dumps({
@@ -73,7 +73,7 @@ def api_action(request, id, action):
                 'status': torrent.status,
                 'progress': torrent.progress,
                 'magnetLink': torrent.magnetLink,
-                'files': sorted(ofiles)
+                'files': sorted(data)
             })
         )
     elif action == 'verify':
