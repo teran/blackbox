@@ -38,7 +38,10 @@ def api_add_torrent(request):
             unlink(tf)
         else:
             for url in request.POST['torrentUrls'].split("\n"):
-                tc.add_torrent(url)
+                try:
+                    tc.add_torrent(url)
+                except:
+                    pass
 
         return redirect('/')
     else:
