@@ -62,6 +62,7 @@ def api_action(request, id, action):
         password=settings.TRANSMISSION['default']['PASSWORD'])
 
     torrent = tc.get_torrent(torrent_id=id)
+    torrent.name = Torrent.objects.get(tid=id).name
 
     if action == 'delete':
         tc.remove_torrent(torrent.id, delete_data=True)
@@ -70,21 +71,38 @@ def api_action(request, id, action):
     elif action == 'stop':
         tc.stop_torrent(torrent.id)
     elif action == 'info':
-        files = torrent.files()
-        data = []
-        for f in files:
-            data.append('%s/%s' % (settings.SHARE_PATH, files[f]['name']))
+        if request.method == 'GET':
+            files = torrent.files()
+            data = []
+            for f in files:
+                data.append('%s/%s' % (settings.SHARE_PATH, files[f]['name']))
 
-        return HttpResponse(
-            content=dumps({
-                'id': torrent.id,
-                'name': torrent.name,
-                'status': torrent.status,
-                'progress': torrent.progress,
-                'magnetLink': torrent.magnetLink,
-                'files': sorted(data)
-            })
-        )
+            return HttpResponse(
+                content=dumps({
+                    'id': torrent.id,
+                    'name': torrent.name,
+                    'status': torrent.status,
+                    'progress': torrent.progress,
+                    'magnetLink': torrent.magnetLink,
+                    'files': sorted(data)
+                })
+            )
+        elif request.method == 'POST':
+            t = Torrent.objects.get(tid=torrent.id)
+            t.name = request.POST.get('name', torrent.name)
+            t.save()
+            return HttpResponse(
+                content=dumps({
+                    'status': 'ok'
+                }), content_type='application/json'
+            )
+        else:
+            return HttpResponseBadRequest(
+                content=dumps({
+                    'status': 'error',
+                    'reason': 'request type should be GET or POST'
+                }), content_type='application/json'
+            )
     elif action == 'verify':
         tc.verify_torrent(torrent.id)
     else:

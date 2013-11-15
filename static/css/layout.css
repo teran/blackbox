@@ -48,3 +48,6 @@ div.loading-image {
 .transmission-meta {
     padding: 10px;
 }
+.torrent-info-name-field {
+    width: 100%;
+}

@@ -3,7 +3,7 @@ $(document).ready(function() {
         var id = $(this).attr('data-id');
         $.getJSON('/api/transmission/'+id+'/info', function(data){
             items = [
-                '<p>Name: '+data.name+'</p>',
+                '<p>Name: <input type="text" class="torrent-info-name-field" data-id="'+data.id+'" value="'+data.name+'" /></p>',
                 '<p>Status: '+data.status+'</p>',
                 '<p>Magnet: '+'<input type="text" class="max-width" value="'+data.magnetLink+'" /></p>',
                 '<p>Actions: ' +
@@ -71,5 +71,16 @@ $(document).ready(function() {
             .fail(function(){
                 alert('Error executing AJAX request!');
             });
+    });
+    $(document).on('keypress', '.torrent-info-name-field', function(e) {
+        if(e.which == 13) {
+            $.post('/api/transmission/'+$(this).attr('data-id')+'/info', {'name': $(this).val()})
+                .done(function() {
+
+                })
+                .fail(function() {
+
+                });
+        }
     });
 });
