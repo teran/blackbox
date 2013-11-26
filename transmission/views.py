@@ -11,7 +11,7 @@ from json import dumps
 import transmissionrpc
 import tempfile
 
-from transmission.models import Torrent, Group
+from transmission.models import Torrent, Group, File
 
 
 def api_add_torrent(request):
@@ -75,6 +75,11 @@ def api_action(request, id, action):
             files = torrent.files()
             data = []
             for f in files:
+                tobj = Torrent.objects.get(tid=torrent.id)
+                file, created = File.objects.get_or_create(
+                    torrent=tobj,
+                    filename=files[f]['name']
+                )
                 data.append('%s/%s' % (settings.SHARE_PATH, files[f]['name']))
 
             return HttpResponse(

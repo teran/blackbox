@@ -15,12 +15,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '%s/dev.sqlite3' % PROJECT_ROOT,
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blackbox',
+        'USER': 'blackbox',
+        'PASSWORD': 'blackbox',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
