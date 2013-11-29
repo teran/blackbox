@@ -54,28 +54,28 @@ def api_add_torrent(request):
 
 
 @csrf_exempt
-def api_action(request, id, action):
+def api_action(request, hash, action):
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],
         port=settings.TRANSMISSION['default']['PORT'],
         user=settings.TRANSMISSION['default']['USER'],
         password=settings.TRANSMISSION['default']['PASSWORD'])
 
-    torrent = tc.get_torrent(torrent_id=id)
-    torrent.name = Torrent.objects.get(tid=id).name
+    torrent = tc.get_torrent(hash)
+    torrent.name = Torrent.objects.get(hash=hash).name
 
     if action == 'delete':
-        tc.remove_torrent(torrent.id, delete_data=True)
+        tc.remove_torrent(hash, delete_data=True)
     elif action == 'start':
-        tc.start_torrent(torrent.id)
+        tc.start_torrent(hash)
     elif action == 'stop':
-        tc.stop_torrent(torrent.id)
+        tc.stop_torrent(hash)
     elif action == 'info':
         if request.method == 'GET':
             files = torrent.files()
             data = []
             for f in files:
-                tobj = Torrent.objects.get(tid=torrent.id)
+                tobj = Torrent.objects.get(hash=hash)
                 file, created = File.objects.get_or_create(
                     torrent=tobj,
                     filename=files[f]['name']
@@ -84,7 +84,7 @@ def api_action(request, id, action):
 
             return HttpResponse(
                 content=dumps({
-                    'id': torrent.id,
+                    'hash': hash,
                     'name': torrent.name,
                     'status': torrent.status,
                     'progress': torrent.progress,
@@ -93,7 +93,7 @@ def api_action(request, id, action):
                 })
             )
         elif request.method == 'POST':
-            t = Torrent.objects.get(tid=torrent.id)
+            t = Torrent.objects.get(hash)
             t.name = request.POST.get('name', torrent.name)
             t.save()
             return HttpResponse(
@@ -109,7 +109,7 @@ def api_action(request, id, action):
                 }), content_type='application/json'
             )
     elif action == 'verify':
-        tc.verify_torrent(torrent.id)
+        tc.verify_torrent(hash)
     else:
         return HttpResponseBadRequest(
             content=dumps({
@@ -135,14 +135,14 @@ def api_list(request):
     data = {}
     for t in rpclist:
         torrent, created = Torrent.objects.get_or_create(
-            tid=t.id
+            hash=t.hashString
         )
         if created:
             torrent.name = t.name
             torrent.save()
 
-        data[t.id] = {
-            'id': t.id,
+        data[t.hashString] = {
+            'hash': t.hashString,
             'name': t.name,
             'status': t.status,
             'progress': t.progress,
@@ -151,10 +151,10 @@ def api_list(request):
 
     for t in Torrent.objects.all():
         try:
-            data[t.tid]['name'] = t.name
+            data[t.hash]['name'] = t.name
         except KeyError:
             t.delete()
-            del(data[t.tid])
+            del(data[t.hash])
 
     return HttpResponse(
         content=dumps(data),
