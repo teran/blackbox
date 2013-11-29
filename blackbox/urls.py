@@ -9,7 +9,7 @@ urlpatterns = patterns(
     (r'^$', 'transmission.views.index'),
     (r'^api\/transmission\/list', 'transmission.views.api_list'),
     (r'^api\/transmission\/add$', 'transmission.views.api_add_torrent'),
-    (r'^api\/transmission\/(?P<hash>[0-9a-z]{32})\/' +
+    (r'^api\/transmission\/(?P<hash>[0-9a-f]{40})\/' +
      '(?P<action>start|stop|delete|info|verify)$',
      'transmission.views.api_action')
 )

@@ -23,7 +23,7 @@ $(document).ready(function() {
                         break;
                 }
                 items.push(
-                    '<li class="torrent-list-item" data-id="'+val.id+'">' +
+                    '<li class="torrent-list-item" data-id="'+val.hash+'">' +
                         val.name + '  (' + percents + '% complete' + ')' +
                         '<div class="progress">' +
                             '<div class="progress-bar '+style+'" role="progressbar" aria-valuenow="' + percents + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percents + '%">' +

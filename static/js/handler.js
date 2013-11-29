@@ -1,16 +1,16 @@
 $(document).ready(function() {
     $(document).on('click', '.torrent-list-item', function(e) {
-        var id = $(this).attr('data-id');
-        $.getJSON('/api/transmission/'+id+'/info', function(data){
+        var hash = $(this).attr('data-id');
+        $.getJSON('/api/transmission/'+hash+'/info', function(data){
             items = [
-                '<p>Name: <input type="text" class="torrent-info-name-field" data-id="'+data.id+'" value="'+data.name+'" /></p>',
+                '<p>Name: <input type="text" class="torrent-info-name-field" data-id="'+data.hash+'" value="'+data.name+'" /></p>',
                 '<p>Status: '+data.status+'</p>',
                 '<p>Magnet: '+'<input type="text" class="max-width" value="'+data.magnetLink+'" /></p>',
                 '<p>Actions: ' +
-                    '<a href="#" class="torrent-delete-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-trash"></span></a> ' +
-                    '<a href="#" class="torrent-resume-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-play"></span></a> ' +
-                    '<a href="#" class="torrent-stop-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-stop"></span></a> ' +
-                    '<a href="#" class="torrent-verify-button" data-id="'+data.id+'"><span class="glyphicon glyphicon-check"></span></a> '
+                    '<a href="#" class="torrent-delete-button" data-id="'+data.hash+'"><span class="glyphicon glyphicon-trash"></span></a> ' +
+                    '<a href="#" class="torrent-resume-button" data-id="'+data.hash+'"><span class="glyphicon glyphicon-play"></span></a> ' +
+                    '<a href="#" class="torrent-stop-button" data-id="'+data.hash+'"><span class="glyphicon glyphicon-stop"></span></a> ' +
+                    '<a href="#" class="torrent-verify-button" data-id="'+data.hash+'"><span class="glyphicon glyphicon-check"></span></a> '
             ];
             var files = ['<ul class="torrent-info-list">']
             $.each(data.files, function(key, val) {

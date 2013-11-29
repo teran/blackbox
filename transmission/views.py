@@ -93,7 +93,7 @@ def api_action(request, hash, action):
                 })
             )
         elif request.method == 'POST':
-            t = Torrent.objects.get(hash)
+            t = Torrent.objects.get(hash=hash)
             t.name = request.POST.get('name', torrent.name)
             t.save()
             return HttpResponse(
