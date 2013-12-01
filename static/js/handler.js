@@ -83,4 +83,9 @@ $(document).ready(function() {
                 });
         }
     });
+    $(document).on('submit', '.searchform', function(e) {
+        e.preventDefault();
+        query = $('.searchfield').val();
+        $('body').data('listUrl', '/api/transmission/filter?query='+query);
+    });
 });

@@ -131,6 +131,8 @@ def api_list(request):
         user=settings.TRANSMISSION['default']['USER'],
         password=settings.TRANSMISSION['default']['PASSWORD'])
 
+    filter = request.GET.get('filter', '')
+
     rpclist = tc.get_torrents()
     data = {}
     for t in rpclist:
@@ -161,6 +163,41 @@ def api_list(request):
         content_type='application/json'
     )
 
+
+def api_filter(request):
+    tc = transmissionrpc.Client(
+        settings.TRANSMISSION['default']['HOST'],
+        port=settings.TRANSMISSION['default']['PORT'],
+        user=settings.TRANSMISSION['default']['USER'],
+        password=settings.TRANSMISSION['default']['PASSWORD'])
+
+    filter = request.GET.get('query', '');
+    data = {}
+    for t in Torrent.objects.filter(name__icontains=filter):
+        rpc = tc.get_torrent(t.hash)
+        data[t.hash] = {
+            'hash': t.hash,
+            'name': t.name,
+            'status': rpc.status,
+            'progress': rpc.progress,
+            'recheckProgress': rpc.recheckProgress * 100,
+        }
+
+    for f in File.objects.filter(filename__icontains=filter):
+        rpc = tc.get_torrent(f.torrent.hash)
+        data[f.torrent.hash] = {
+            'hash': f.torrent.hash,
+            'name': f.torrent.name,
+            'status': rpc.status,
+            'progress': rpc.progress,
+            'recheckProgress': rpc.recheckProgress * 100,
+        }
+
+
+    return HttpResponse(
+        content=dumps(data),
+        content_type='application/json'
+    )
 
 def index(request):
     return render_to_response(

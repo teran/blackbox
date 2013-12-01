@@ -1,6 +1,6 @@
 $(document).ready(function() {
     setInterval(function() {
-        $.getJSON('/api/transmission/list', function(data) {
+        $.getJSON($('body').data('listUrl') || '/api/transmission/list', function(data) {
             var items = ['<div class="navbar transmission-meta"><button class="btn btn-primary add-torrent-button">Add torrent</button></div>'];
             $.each(data, function(key, val) {
                 var percents = Math.round(val.progress);
