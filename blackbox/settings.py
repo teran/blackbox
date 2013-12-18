@@ -33,7 +33,15 @@ TRANSMISSION = {
     }
 }
 
+VAULT_PATH = '/srv/bigvol/downloads'
+
 SHARE_PATH = '/share/'
+
+HARDLINK_PATH = '/srv/hardlink'
+
+HARDLINK_URL = '/hardlink/'
+
+HARDLINK_TTL = 120
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts

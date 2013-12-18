@@ -4,14 +4,15 @@ from django.shortcuts import HttpResponse, render_to_response,\
     RequestContext, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from base64 import b64encode
-from os import unlink
-from json import dumps
-
 import transmissionrpc
 import tempfile
+from base64 import b64encode
+from json import dumps
+from os import unlink, symlink
+from hashlib import sha1
+from random import random
 
-from transmission.models import Torrent, Group, File
+from transmission.models import Torrent, Group, File, Hardlink
 
 
 def api_add_torrent(request):
@@ -197,6 +198,39 @@ def api_filter(request):
     return HttpResponse(
         content=dumps(data),
         content_type='application/json'
+    )
+
+def hardlink(request, file):
+    file = File.objects.get(pk=file)
+
+    token = sha1('%s:%s:%s' % (
+        random(),
+        file.pk,
+        file.filename
+    )).hexdigest()
+
+    hardlink = Hardlink(
+        token=token,
+        file=file
+    )
+    hardlink.save()
+
+    symlink(
+        '%s/%s' % (
+            settings.VAULT_PATH,
+            file.filename
+        ),
+        '%s/%s' % (
+            settings.HARDLINK_PATH,
+            token
+        )
+    )
+
+    return HttpResponse(
+        content=dumps({
+            'status': 'ok',
+            'token': token
+        }), content_type='application/json'
     )
 
 def index(request):
