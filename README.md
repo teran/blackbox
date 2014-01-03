@@ -14,7 +14,7 @@ requirements
 
 notice
 ------
-The dependencies defined above it's the software testing with this application and works fine. As we use django framework we can use every database it supports but they are all untested.
+The dependencies defined above it is the software testing with this application and works fine. As we use django framework we can use every database it supports but they are all untested.
 
 How to install
 ==============
@@ -25,4 +25,4 @@ How to install
 	./manage.py migrate transmission
 	./manage.py runserver
 
-In later plans is to run application with uwsgi.
+In later plans is to run application with uwsgi now it is possible with manually written uwsgi configuration file.
