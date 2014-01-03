@@ -140,6 +140,7 @@ def api_action(request, hash, action):
         }), content_type='application/json'
     )
 
+
 @login_required
 def api_list(request):
     """
@@ -183,6 +184,7 @@ def api_list(request):
         content_type='application/json'
     )
 
+
 @login_required
 def api_filter(request):
     """
@@ -194,7 +196,7 @@ def api_filter(request):
         user=settings.TRANSMISSION['default']['USER'],
         password=settings.TRANSMISSION['default']['PASSWORD'])
 
-    filter = request.GET.get('query', '');
+    filter = request.GET.get('query', '')
     data = {}
     for t in Torrent.objects.filter(name__icontains=filter):
         rpc = tc.get_torrent(t.hash)
@@ -216,11 +218,11 @@ def api_filter(request):
             'recheckProgress': rpc.recheckProgress * 100,
         }
 
-
     return HttpResponse(
         content=dumps(data),
         content_type='application/json'
     )
+
 
 @login_required
 def hardlink(request, file):
@@ -259,6 +261,7 @@ def hardlink(request, file):
         }), content_type='application/json'
     )
 
+
 @login_required
 def index(request):
     """
@@ -268,6 +271,7 @@ def index(request):
         'transmission/list.html',
         {'nav': 'transmission'},
         context_instance=RequestContext(request))
+
 
 def view_login(request):
     """
@@ -292,6 +296,7 @@ def view_login(request):
         return render_to_response(
             'transmission/login.html',
             context_instance=RequestContext(request))
+
 
 @login_required
 def view_logout(request):
