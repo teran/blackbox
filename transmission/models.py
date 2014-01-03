@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -31,6 +32,7 @@ class Hardlink(models.Model):
     token = models.CharField(max_length=64)
     file = models.ForeignKey(File, related_name='hardlinks')
     created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, related_name='users')
 
     def __unicode__(self):
         return self.token

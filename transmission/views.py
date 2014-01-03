@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest
-from django.shortcuts import HttpResponse, render_to_response,\
+from django.shortcuts import HttpResponse, render_to_response, \
     RequestContext, redirect
 from django.views.decorators.csrf import csrf_exempt
 
@@ -15,6 +17,7 @@ from random import random
 from transmission.models import Torrent, Group, File, Hardlink
 
 
+@login_required
 def api_add_torrent(request):
     if request.method == 'POST':
         tc = transmissionrpc.Client(
@@ -55,6 +58,7 @@ def api_add_torrent(request):
 
 
 @csrf_exempt
+@login_required
 def api_action(request, hash, action):
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],
@@ -124,7 +128,7 @@ def api_action(request, hash, action):
         }), content_type='application/json'
     )
 
-
+@login_required
 def api_list(request):
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],
@@ -164,7 +168,7 @@ def api_list(request):
         content_type='application/json'
     )
 
-
+@login_required
 def api_filter(request):
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],
@@ -200,6 +204,7 @@ def api_filter(request):
         content_type='application/json'
     )
 
+@login_required
 def hardlink(request, file):
     file = File.objects.get(pk=file)
 
@@ -233,8 +238,35 @@ def hardlink(request, file):
         }), content_type='application/json'
     )
 
+@login_required
 def index(request):
     return render_to_response(
         'transmission/list.html',
         {'nav': 'transmission'},
         context_instance=RequestContext(request))
+
+def view_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('/')
+            else:
+                pass
+                # Return a 'disabled account' error message
+        else:
+            pass
+            # Return an 'invalid login' error message.
+    else:
+        pass
+        return render_to_response(
+            'transmission/login.html',
+            context_instance=RequestContext(request))
+
+@login_required
+def view_logout(request):
+    logout(request)
+    return redirect('/')
