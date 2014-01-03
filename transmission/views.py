@@ -19,6 +19,9 @@ from transmission.models import Torrent, Group, File, Hardlink
 
 @login_required
 def api_add_torrent(request):
+    """
+    Add torrent with a torrent file, http link or magnet link
+    """
     if request.method == 'POST':
         tc = transmissionrpc.Client(
             settings.TRANSMISSION['default']['HOST'],
@@ -60,6 +63,15 @@ def api_add_torrent(request):
 @csrf_exempt
 @login_required
 def api_action(request, hash, action):
+    """
+    Common method to do some of actions like:
+
+     * delete torrent
+     * start downloading/seeding
+     * stop downloading/seeding
+     * get info
+     * update torrent name
+    """
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],
         port=settings.TRANSMISSION['default']['PORT'],
@@ -130,6 +142,9 @@ def api_action(request, hash, action):
 
 @login_required
 def api_list(request):
+    """
+    List all torrents
+    """
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],
         port=settings.TRANSMISSION['default']['PORT'],
@@ -170,6 +185,9 @@ def api_list(request):
 
 @login_required
 def api_filter(request):
+    """
+    Search for torrens with their names
+    """
     tc = transmissionrpc.Client(
         settings.TRANSMISSION['default']['HOST'],
         port=settings.TRANSMISSION['default']['PORT'],
@@ -206,6 +224,9 @@ def api_filter(request):
 
 @login_required
 def hardlink(request, file):
+    """
+    Create hardlink to file
+    """
     file = File.objects.get(pk=file)
 
     token = sha1('%s:%s:%s' % (
@@ -240,12 +261,18 @@ def hardlink(request, file):
 
 @login_required
 def index(request):
+    """
+    Index page
+    """
     return render_to_response(
         'transmission/list.html',
         {'nav': 'transmission'},
         context_instance=RequestContext(request))
 
 def view_login(request):
+    """
+    User login view
+    """
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -268,5 +295,8 @@ def view_login(request):
 
 @login_required
 def view_logout(request):
+    """
+    User logout view
+    """
     logout(request)
     return redirect('/')
