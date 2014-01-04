@@ -10,9 +10,10 @@ import transmissionrpc
 import tempfile
 from base64 import b64encode
 from json import dumps
-from os import unlink, symlink
+from os import unlink, symlink, path
 from hashlib import sha1
 from random import random
+from datetime import datetime, timedelta
 
 from transmission.models import Torrent, Group, File, Hardlink
 
@@ -225,10 +226,23 @@ def api_filter(request):
 
 
 @login_required
-def api_hardlink(request, file):
+def api_hardlink(request, file, static=False):
     """
     Create hardlink to file
     """
+    expired = Hardlink.objects.filter(
+        created__lte = (datetime.now() - timedelta(
+            seconds=settings.HARDLINK_TTL)))
+
+    for hardlink in expired:
+        hardlink.delete()
+        unlink(
+            path.join(
+                settings.HARDLINK_PATH,
+                hardlink.token
+            )
+        )
+
     file = get_object_or_404(File, pk=file)
 
     token = sha1('%s:%s:%s' % (
@@ -239,7 +253,8 @@ def api_hardlink(request, file):
 
     hardlink = Hardlink(
         token=token,
-        file=file
+        file=file,
+        user=request.user
     )
     hardlink.save()
 
@@ -264,7 +279,7 @@ def api_hardlink(request, file):
 
 @login_required
 def download(request, file):
-    file = File.objects.get(pk=file)
+    file = get_object_or_404(File, pk=file)
 
 
 @login_required
