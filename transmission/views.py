@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest
 from django.shortcuts import HttpResponse, render_to_response, \
-    RequestContext, redirect
+    RequestContext, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
 import transmissionrpc
@@ -229,7 +229,7 @@ def api_hardlink(request, file):
     """
     Create hardlink to file
     """
-    file = File.objects.get(pk=file)
+    file = get_object_or_404(File, pk=file)
 
     token = sha1('%s:%s:%s' % (
         random(),
@@ -260,6 +260,11 @@ def api_hardlink(request, file):
             'token': token
         }), content_type='application/json'
     )
+
+
+@login_required
+def download(request, file):
+    file = File.objects.get(pk=file)
 
 
 @login_required
