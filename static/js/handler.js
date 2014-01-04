@@ -14,9 +14,9 @@ $(document).ready(function() {
             ];
             var files = ['<ul class="torrent-info-list">']
             $.each(data.files, function(key, val) {
-                fn = val.split('/');
+                // fn = val.split('/');
                 if(data.progress == 100) {
-                    files.push('<li class="torrent-info-item"><a href="'+val+'">'+fn[fn.length-1]+'<a></li>');
+                    files.push('<li class="torrent-info-item"><a href="'+val.link+'">'+val.filename+'<a></li>');
                 } else {
                     files.push('<li class="torrent-info-item">'+fn[fn.length-1]+'</li>');
                 }

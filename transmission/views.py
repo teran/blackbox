@@ -55,7 +55,10 @@ def api_action(request, hash, action):
                     torrent=tobj,
                     filename=files[f]['name']
                 )
-                data.append('%s/%s' % (settings.SHARE_PATH, files[f]['name']))
+                data.append({
+                    'filename': '%s' % path.basename(files[f]['name']),
+                    'link': '/hardlink/%s?redirect=1' % file.pk
+                })
 
             return HttpResponse(
                 content=dumps({
@@ -232,7 +235,7 @@ def download(request, hardlink):
     hardlink = get_object_or_404(
         Hardlink,
         token=hardlink,
-        created__lte = (datetime.now() - timedelta(
+        created__gte = (datetime.now() - timedelta(
             seconds=settings.HARDLINK_TTL))
     )
     filename = hardlink.file.filename
@@ -300,7 +303,7 @@ def hardlink(request, file):
     if int(request.GET.get('redirect', 0)) == 1:
         return redirect(
             path.join(
-                settings.INTERNAL_DOWNLOAD_PATH,
+                '/download/',
                 token
             )
         )
