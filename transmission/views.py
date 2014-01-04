@@ -276,9 +276,42 @@ def api_hardlink(request, file, static=False):
         }), content_type='application/json'
     )
 
+def download(request, hardlink):
+    """
+    Download file with hardlink
+    """
+    hardlink = get_object_or_404(
+        Hardlink,
+        token=hardlink,
+        created__lte = (datetime.now() - timedelta(
+            seconds=settings.HARDLINK_TTL))
+    )
+    filename = hardlink.file.filename
+
+    response = HttpResponse()
+
+    response['Content-Type'] = 'video/mp4'
+
+    disposition = request.GET.get('disposition', 'attachment')
+    if disposition == 'inline':
+        response['Content-Disposition'] = 'inline; filename=%s' % path.basename(
+            filename)
+    else:
+        response['Content-Disposition'] = 'attachment; filename=%s' % path.basename(
+            filename)
+
+    response['X-Accel-Redirect'] = path.join(
+        settings.INTERNAL_DOWNLOAD_PATH,
+        filename)
+
+    return response
+
 
 @login_required
 def file(request, file):
+    """
+    File info page
+    """
     file = get_object_or_404(File, pk=file)
 
     return render_to_response(

@@ -7,9 +7,10 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns(
     '',
     (r'^$', 'transmission.views.index'),
+    (r'^file\/(?P<file>[0-9]+)$', 'transmission.views.file'),
+    (r'^download\/(?P<hardlink>[a-f0-9]{40})$', 'transmission.views.download'),
     (r'^login$', 'transmission.views.view_login'),
     (r'^logout$', 'transmission.views.view_logout'),
-    (r'^file\/(?P<file>[0-9]+)$', 'transmission.views.file'),
     (r'^api\/transmission\/filter$', 'transmission.views.api_filter'),
     (r'^api\/transmission\/list$', 'transmission.views.api_list'),
     (r'^api\/transmission\/add$', 'transmission.views.api_add_torrent'),
@@ -17,5 +18,5 @@ urlpatterns = patterns(
      'transmission.views.api_hardlink'),
     (r'^api\/transmission\/(?P<hash>[0-9a-f]{40})\/' +
      '(?P<action>start|stop|delete|info|verify)$',
-     'transmission.views.api_action')
+     'transmission.views.api_action'),
 )
