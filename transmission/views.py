@@ -296,9 +296,8 @@ def hardlink(request, file):
     )
     hardlink.save()
 
-    redirect = request.GET.get('redirect')
 
-    if redirect == 1:
+    if int(request.GET.get('redirect', 0)) == 1:
         return redirect(
             path.join(
                 settings.INTERNAL_DOWNLOAD_PATH,

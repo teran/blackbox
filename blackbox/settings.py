@@ -46,7 +46,7 @@ HARDLINK_PATH = '/srv/hardlink'
 
 HARDLINK_URL = '/hardlink/'
 
-HARDLINK_TTL = 120
+HARDLINK_TTL = 2*60*60
 
 LOGIN_URL = '/login'
 
