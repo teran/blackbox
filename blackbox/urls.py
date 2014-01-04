@@ -9,6 +9,7 @@ urlpatterns = patterns(
     (r'^$', 'transmission.views.index'),
     (r'^login$', 'transmission.views.view_login'),
     (r'^logout$', 'transmission.views.view_logout'),
+    (r'^file\/(?P<file>[0-9]+)$', 'transmission.views.file'),
     (r'^api\/transmission\/filter$', 'transmission.views.api_filter'),
     (r'^api\/transmission\/list$', 'transmission.views.api_list'),
     (r'^api\/transmission\/add$', 'transmission.views.api_add_torrent'),

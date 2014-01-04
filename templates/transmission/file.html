@@ -1,0 +1,30 @@
+{% extends 'common/boilerplate.html' %}
+{% load staticfiles %}
+
+{% block title %}Index{% endblock %}
+
+{% block load %}
+        <script src="{% static 'js/transmission.js' %}"></script>
+        <script>
+            $(document).ready(function(e) {
+                $.getJSON('/api/transmission/hardlink/{{ file.pk }}', function(data) {
+                    $('.download-link').html('<a href="{{ path }}/'+data.token+'">Download</a>');
+                    $('.file-player').html(
+                        '<video>'+
+                        '    <source src="{{ path }}/'+data.token+'" type="video/mp4" />'+
+                        '</video>'
+                    )
+                });
+            });
+        </script>
+{% endblock %}
+
+{% block content %}
+    <div class="file-info-container">
+        <div class="file-header">
+            <h3>{{ file.filename }}</h3>
+        </div>
+        <div class="file-player"></div>
+        <div class="download-link">Loading...</div>
+    </div>
+{% endblock %}

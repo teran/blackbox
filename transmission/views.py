@@ -278,8 +278,16 @@ def api_hardlink(request, file, static=False):
 
 
 @login_required
-def download(request, file):
+def file(request, file):
     file = get_object_or_404(File, pk=file)
+
+    return render_to_response(
+        'transmission/file.html',
+        {
+            'file': file,
+            'path': settings.HARDLINK_URL
+        },
+        context_instance=RequestContext(request))
 
 
 @login_required
