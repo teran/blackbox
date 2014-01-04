@@ -225,7 +225,7 @@ def api_filter(request):
 
 
 @login_required
-def hardlink(request, file):
+def api_hardlink(request, file):
     """
     Create hardlink to file
     """
