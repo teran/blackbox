@@ -59,7 +59,7 @@ def api_action(request, hash, action):
                 if settings.EMBEDED_PLAYER:
                     data.append({
                         'filename': '%s' % path.basename(files[f]['name']),
-                        'link': '/file/%s?redirect=1' % file.pk,
+                        'link': '/file/%s' % file.pk,
                         'viewed': View.objects.filter(
                             file=file, user=request.user).count()
                     })
