@@ -23,6 +23,7 @@
                         BlackBox
                     </a>
                 </div>
+                {% if user.is_authenticated %}
                 <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                     <ul class="nav navbar-nav">
                         <li{% if nav == 'transmission' %} class="active"{% endif %}><a href="/">Transmission</a></li>
@@ -34,13 +35,13 @@
                             </div>
                             <button type="submit" class="btn btn-default searchfield-submit">Submit</button>
                         </form>
-                        {% if user.is_authenticated %}
+
                         <ul class="nav navbar-nav">
                             <li><a href="/logout">Logout</a></li>
                         </ul>
-                        {% endif %}
                     </div>
                 </nav>
+                {% endif %}
             </div>
         </header>
         <div class="content">
