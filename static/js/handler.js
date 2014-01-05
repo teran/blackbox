@@ -14,7 +14,6 @@ $(document).ready(function() {
             ];
             var files = ['<ul class="torrent-info-list">']
             $.each(data.files, function(key, val) {
-                // glyphicon glyphicon-ok-circle
                 if(data.progress == 100) {
                     html = '<li class="torrent-info-item">';
                     if(val.viewed == 1) {
