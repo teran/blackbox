@@ -1,18 +1,18 @@
 {% extends 'common/boilerplate.html' %}
 {% load staticfiles %}
 
-{% block title %}Index{% endblock %}
+{% block title %}{{ file.filename }}{% endblock %}
 
 {% block load %}
         <script>
             $(document).ready(function(e) {
-                $.getJSON('/api/transmission/hardlink/{{ file.pk }}', function(data) {
-                    $('.download-link').html('<a href="{{ path }}/'+data.token+'">Download</a>');
+                $.getJSON('/hardlink/{{ file.pk }}', function(data) {
+                    $('.download-link').html('<a href="{{ path }}'+data.token+'">Download</a>');
                     $('.file-player').html(
                         '<video>'+
-                        '    <source src="{{ path }}/'+data.token+'" type="video/mp4" />'+
+                        '    <source src="/download/'+data.token+'?disposition=inline" type="video/mp4" />'+
                         '</video>'
-                    )
+                    );
                 });
             });
         </script>
