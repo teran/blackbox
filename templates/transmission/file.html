@@ -3,27 +3,20 @@
 
 {% block title %}{{ file.filename }}{% endblock %}
 
-{% block load %}
-        <script>
-            $(document).ready(function(e) {
-                $.getJSON('/hardlink/{{ file.pk }}', function(data) {
-                    $('.download-link').html('<a href="{{ path }}'+data.token+'">Download</a>');
-                    $('.file-player').html(
-                        '<video>'+
-                        '    <source src="/download/'+data.token+'?disposition=inline" type="video/mp4" />'+
-                        '</video>'
-                    );
-                });
-            });
-        </script>
-{% endblock %}
-
 {% block content %}
     <div class="file-info-container">
         <div class="file-header">
             <h3>{{ file.filename }}</h3>
         </div>
-        <div class="file-player"></div>
-        <div class="download-link">Loading...</div>
+        <div class="file-player">
+            <div class="video-player">
+                <video controls="controls">
+                    <source src="/hardlink/{{ file.pk }}?redirect=1&disposition=inline" type="video/mp4" />
+                </video>
+            </div>
+        </div>
+        <div class="download-link">
+            <a href="/hardlink/{{ file.pk }}?redirect=1&disposition=attachment">Download</a>
+        </div>
     </div>
 {% endblock %}

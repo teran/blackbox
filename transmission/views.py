@@ -321,13 +321,13 @@ def hardlink(request, file):
             path.join(
                 '/download/',
                 token
-            )
+            ) + '?' + '&'.join(['%s=%s' % (x, request.GET.get(x)) for x in request.GET.keys()])
         )
 
     return HttpResponse(
         content=dumps({
             'status': 'ok',
-            'token': token
+            'token': token,
         }), content_type='application/json'
     )
 
