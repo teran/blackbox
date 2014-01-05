@@ -56,12 +56,20 @@ def api_action(request, hash, action):
                     torrent=tobj,
                     filename=files[f]['name']
                 )
-                data.append({
-                    'filename': '%s' % path.basename(files[f]['name']),
-                    'link': '/hardlink/%s?redirect=1' % file.pk,
-                    'viewed': View.objects.filter(
-                        file=file, user=request.user).count()
-                })
+                if settings.EMBEDED_PLAYER:
+                    data.append({
+                        'filename': '%s' % path.basename(files[f]['name']),
+                        'link': '/file/%s?redirect=1' % file.pk,
+                        'viewed': View.objects.filter(
+                            file=file, user=request.user).count()
+                    })
+                else:
+                    data.append({
+                        'filename': '%s' % path.basename(files[f]['name']),
+                        'link': '/hardlink/%s?redirect=1' % file.pk,
+                        'viewed': View.objects.filter(
+                            file=file, user=request.user).count()
+                    })
 
             return HttpResponse(
                 content=dumps({
