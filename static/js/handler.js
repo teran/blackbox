@@ -14,9 +14,14 @@ $(document).ready(function() {
             ];
             var files = ['<ul class="torrent-info-list">']
             $.each(data.files, function(key, val) {
-                // fn = val.split('/');
+                // glyphicon glyphicon-ok-circle
                 if(data.progress == 100) {
-                    files.push('<li class="torrent-info-item"><a href="'+val.link+'">'+val.filename+'<a></li>');
+                    html = '<li class="torrent-info-item">';
+                    if(val.viewed == 1) {
+                        html += '<span class="glyphicon glyphicon-ok-circle"> </span> ';
+                    }
+                    html += '<a href="'+val.link+'">'+val.filename+'<a></li>';
+                    files.push(html);
                 } else {
                     files.push('<li class="torrent-info-item">'+fn[fn.length-1]+'</li>');
                 }

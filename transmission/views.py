@@ -16,7 +16,7 @@ from django.shortcuts import HttpResponse, render_to_response, \
     RequestContext, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
-from transmission.models import Torrent, Group, File, Hardlink
+from transmission.models import Torrent, Group, File, Hardlink, View
 
 
 @csrf_exempt
@@ -58,7 +58,9 @@ def api_action(request, hash, action):
                 )
                 data.append({
                     'filename': '%s' % path.basename(files[f]['name']),
-                    'link': '/hardlink/%s?redirect=1' % file.pk
+                    'link': '/hardlink/%s?redirect=1' % file.pk,
+                    'viewed': View.objects.filter(
+                        file=file, user=request.user).count()
                 })
 
             return HttpResponse(
@@ -240,6 +242,10 @@ def download(request, hardlink):
             seconds=settings.HARDLINK_TTL))
     )
     filename = hardlink.file.filename
+    view, created = View.objects.get_or_create(
+        file=hardlink.file,
+        user=hardlink.user
+    )
 
     response = HttpResponse()
 

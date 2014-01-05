@@ -36,3 +36,8 @@ class Hardlink(models.Model):
 
     def __unicode__(self):
         return self.token
+
+
+class View(models.Model):
+    file = models.ForeignKey(File, related_name='views')
+    user = models.ForeignKey(User, related_name='viewed')
