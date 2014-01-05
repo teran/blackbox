@@ -29,7 +29,7 @@ class File(models.Model):
 
 
 class Hardlink(models.Model):
-    token = models.CharField(max_length=64)
+    token = models.CharField(max_length=64, db_index=True)
     file = models.ForeignKey(File, related_name='hardlinks')
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, related_name='users')
