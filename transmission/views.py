@@ -1,5 +1,6 @@
 import transmissionrpc
 import tempfile
+import mimetypes
 from base64 import b64encode
 from json import dumps
 from os import unlink, path
@@ -242,7 +243,16 @@ def download(request, hardlink):
 
     response = HttpResponse()
 
-    response['Content-Type'] = 'video/mp4'
+    mimetypes.knownfiles.append(
+        path.join(
+            settings.PROJECT_ROOT,
+            '../contrib/mime.types'
+        )
+    )
+
+    mimetypes.init()
+
+    response['Content-Type'] = mimetypes.guess_type(filename)[0]
 
     disposition = request.GET.get('disposition', 'attachment')
     if disposition == 'inline':
