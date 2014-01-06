@@ -8,12 +8,10 @@
         <div class="file-header">
             <h3>{{ file.filename }}</h3>
         </div>
-        <div class="file-player">
-            <div class="video-player">
-                <video controls="controls" autoplay="autoplay">
-                    <source src="/hardlink/{{ file.pk }}?redirect=1&disposition=inline" type="video/mp4" />
-                </video>
-            </div>
+        <div class="video-player">
+            <video controls="controls" autoplay="autoplay">
+                <source src="/hardlink/{{ file.pk }}?redirect=1&disposition=inline" type="video/mp4"/>
+            </video>
         </div>
         <div class="download-link">
             <a href="/hardlink/{{ file.pk }}?redirect=1&disposition=attachment">Download</a>
