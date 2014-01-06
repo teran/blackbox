@@ -22,7 +22,7 @@ $(document).ready(function() {
                     html += '<a href="'+val.link+'">'+val.filename+'<a></li>';
                     files.push(html);
                 } else {
-                    files.push('<li class="torrent-info-item">'+fn[fn.length-1]+'</li>');
+                    files.push('<li class="torrent-info-item">'+val.filename+'</li>');
                 }
             });
             files.push('</ul>');
