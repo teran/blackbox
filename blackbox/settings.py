@@ -29,8 +29,8 @@ DATABASES = {
     }
 }
 
-import sys
-if 'test' in sys.argv:
+from sys import argv
+if 'test' in argv:
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': '%s/../test.sqlite3' % PROJECT_ROOT,
