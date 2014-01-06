@@ -290,6 +290,11 @@ def file(request, file):
     """
     file = get_object_or_404(File, pk=file)
 
+    if mimetypes.guess_type(file.filename)[0] != 'video/mp4':
+        return redirect(
+                '/hardlink/%s' % file.pk  +
+                '?redirect=1&disposition=inline')
+
     return render_to_response(
         'transmission/file.html',
         {
