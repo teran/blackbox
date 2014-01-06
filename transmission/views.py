@@ -369,12 +369,16 @@ def view_login(request):
                 login(request, user)
                 next_url = request.GET.get('next', '/')
                 return redirect(next_url)
-            #else:
-            #    pass
-            #    # Return a 'disabled account' error message
-        #else:
-        #    pass
-        #    # Return an 'invalid login' error message.
+            else:
+                return render_to_response(
+                    'transmission/login.html',
+                    {'error': 'disabled_account'},
+                    context_instance=RequestContext(request))
+        else:
+            return render_to_response(
+                'transmission/login.html',
+                {'error': 'invalid_login'},
+                context_instance = RequestContext(request))
     else:
         return render_to_response(
             'transmission/login.html',
