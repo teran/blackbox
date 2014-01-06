@@ -29,6 +29,13 @@ DATABASES = {
     }
 }
 
+import sys
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '%s/../test.sqlite3' % PROJECT_ROOT,
+    }
+
 TRANSMISSION = {
     'default': {
         'HOST': '127.0.0.1',
