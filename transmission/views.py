@@ -246,7 +246,7 @@ def download(request, hardlink):
     hardlink = get_object_or_404(
         Hardlink,
         token=hardlink,
-        created__gte = (datetime.now() - timedelta(
+        created__gte=(datetime.now() - timedelta(
             seconds=settings.HARDLINK_TTL))
     )
     filename = hardlink.file.filename
@@ -270,11 +270,11 @@ def download(request, hardlink):
 
     disposition = request.GET.get('disposition', 'attachment')
     if disposition == 'inline':
-        response['Content-Disposition'] = 'inline; filename=%s' % path.basename(
-            filename)
+        response['Content-Disposition'] = 'inline; filename=%s' % \
+                                          path.basename(filename)
     else:
-        response['Content-Disposition'] = 'attachment; filename=%s' % path.basename(
-            filename)
+        response['Content-Disposition'] = 'attachment; filename=%s' % \
+                                          path.basename(filename)
 
     response['X-Accel-Redirect'] = path.join(
         settings.INTERNAL_DOWNLOAD_PATH,
@@ -292,8 +292,8 @@ def file(request, file):
 
     if mimetypes.guess_type(file.filename)[0] != 'video/mp4':
         return redirect(
-                '/hardlink/%s' % file.pk  +
-                '?redirect=1&disposition=inline')
+            '/hardlink/%s' % file.pk +
+            '?redirect=1&disposition=inline')
 
     return render_to_response(
         'transmission/file.html',
@@ -310,7 +310,7 @@ def hardlink(request, file):
     Create hardlink to file
     """
     Hardlink.objects.filter(
-        created__lte = (datetime.now() - timedelta(
+        created__lte=(datetime.now() - timedelta(
             seconds=settings.HARDLINK_TTL))).delete()
 
     file = get_object_or_404(File, pk=file)
@@ -328,13 +328,14 @@ def hardlink(request, file):
     )
     hardlink.save()
 
-
     if int(request.GET.get('redirect', 0)) == 1:
         return redirect(
             path.join(
                 '/download/',
                 token
-            ) + '?' + '&'.join(['%s=%s' % (x, request.GET.get(x)) for x in request.GET.keys()])
+            ) + '?' + '&'.join(
+                ['%s=%s' % (
+                    x, request.GET.get(x)) for x in request.GET.keys()])
         )
 
     return HttpResponse(
@@ -378,7 +379,7 @@ def view_login(request):
             return render_to_response(
                 'transmission/login.html',
                 {'error': 'invalid_login'},
-                context_instance = RequestContext(request))
+                context_instance=RequestContext(request))
     else:
         return render_to_response(
             'transmission/login.html',

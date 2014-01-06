@@ -102,6 +102,7 @@ class BlackboxUnitTest(TestCase):
         self.assertEqual(view.file, file)
         self.assertEqual(view.user, user)
 
+
 class BlackboxCITest(TestCase):
     def test_dummy(self):
         pass
