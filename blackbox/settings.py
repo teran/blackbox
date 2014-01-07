@@ -47,9 +47,7 @@ TRANSMISSION = {
 
 VAULT_PATH = '/srv/bigvol/downloads'
 
-INTERNAL_DOWNLOAD_PATH = '/downloads/'
-
-HARDLINK_PATH = '/srv/hardlink'
+INTERNAL_DOWNLOAD_PATH = '/get/'
 
 HARDLINK_URL = '/hardlink/'
 
