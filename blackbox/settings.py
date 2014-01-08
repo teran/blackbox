@@ -49,6 +49,10 @@ VAULT_PATH = '/srv/bigvol/downloads'
 
 INTERNAL_DOWNLOAD_PATH = '/get/'
 
+DOWNLOAD_URL = '/download/'
+
+FILE_URL = '/file/'
+
 HARDLINK_URL = '/hardlink/'
 
 HARDLINK_TTL = 2*60*60

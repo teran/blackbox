@@ -59,14 +59,15 @@ def api_action(request, hash, action):
                 if settings.EMBEDED_PLAYER:
                     data.append({
                         'filename': '%s' % path.basename(files[f]['name']),
-                        'link': '/file/%s' % file.pk,
+                        'link': path.join(settings.FILE_URL, str(file.pk)),
                         'viewed': View.objects.filter(
                             file=file, user=request.user).count()
                     })
                 else:
                     data.append({
                         'filename': '%s' % path.basename(files[f]['name']),
-                        'link': '/hardlink/%s?redirect=1' % file.pk,
+                        'link': path.join(settings.HARDLINK_URL, str(file.pk)) +
+                                '?redirect=1' % file.pk,
                         'viewed': View.objects.filter(
                             file=file, user=request.user).count()
                     })
@@ -292,7 +293,7 @@ def file(request, file):
 
     if mimetypes.guess_type(file.filename)[0] != 'video/mp4':
         return redirect(
-            '/hardlink/%s' % file.pk +
+            path.join(settings.HARDLINK_URL, str(file.pk)) +
             '?redirect=1&disposition=inline')
 
     return render_to_response(
@@ -331,7 +332,7 @@ def hardlink(request, file):
     if int(request.GET.get('redirect', 0)) == 1:
         return redirect(
             path.join(
-                '/download/',
+                settings.DOWNLOAD_URL,
                 token
             ) + '?' + '&'.join(
                 ['%s=%s' % (
