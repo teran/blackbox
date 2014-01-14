@@ -7,6 +7,7 @@ from os import unlink, path
 from hashlib import sha1
 from random import random
 from datetime import datetime, timedelta
+from urllib import quote
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
@@ -270,16 +271,17 @@ def download(request, hardlink):
     response['Content-Type'] = mimetypes.guess_type(filename)[0]
 
     disposition = request.GET.get('disposition', 'attachment')
+    basename = path.basename(filename).encode('utf-8')
     if disposition == 'inline':
         response['Content-Disposition'] = 'inline; filename=%s' % \
-                                          path.basename(filename)
+                                          basename
     else:
         response['Content-Disposition'] = 'attachment; filename=%s' % \
-                                          path.basename(filename)
+                                          basename
 
     response['X-Accel-Redirect'] = path.join(
         settings.INTERNAL_DOWNLOAD_PATH,
-        filename)
+        filename.encode('utf-8'))
 
     return response
 
@@ -316,10 +318,9 @@ def hardlink(request, file):
 
     file = get_object_or_404(File, pk=file)
 
-    token = sha1('%s:%s:%s' % (
+    token = sha1('%s:%s' % (
         random(),
         file.pk,
-        file.filename
     )).hexdigest()
 
     hardlink = Hardlink(
