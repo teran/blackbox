@@ -364,8 +364,8 @@ def view_login(request):
     User login view
     """
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
