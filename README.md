@@ -10,7 +10,7 @@ requirements
  * django framework (>=1.5)
  * MySQL database (>= 5.1)
  * python-south
- * python-transmissionrpc 0.11+
+ * python-transmissionrpc (>= 0.11)
 
 notice
 ------
