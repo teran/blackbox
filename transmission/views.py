@@ -136,16 +136,25 @@ def api_add_torrent(request):
             fp.close()
             fp = open(tf, 'r')
 
-            tc.add_torrent(b64encode(fp.read()))
+            try:
+                tc.add_torrent(b64encode(fp.read()))
+            except transmissionrpc.error.TransmissionError as e:
+                if str(e) == 'Query failed with result "duplicate torrent".':
+                    pass
+                else:
+                    raise
 
             fp.close()
             unlink(tf)
         else:
             for url in request.POST['torrentUrls'].split("\n"):
-            #    try:
-                tc.add_torrent(url)
-            #    except:
-            #        pass
+                try:
+                    tc.add_torrent(url)
+                except transmissionrpc.error.TransmissionError as e:
+                    if str(e)=='Query failed with result "duplicate torrent".':
+                        pass
+                    else:
+                        raise
 
         return redirect('/')
     else:
