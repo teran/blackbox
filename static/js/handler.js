@@ -93,7 +93,7 @@ $(document).ready(function() {
         if(query == '') {
             $('body').data('listUrl', '/api/transmission/list');
         } else {
-            $('body').data('listUrl', '/api/transmission/filter?query='+query);
+            $('body').data('listUrl', '/api/transmission/list?filter='+query);
         }
     });
 });

@@ -114,7 +114,6 @@ def api_action(request, hash, action):
         }), content_type='application/json'
     )
 
-
 @login_required
 def api_add_torrent(request):
     """
@@ -143,10 +142,10 @@ def api_add_torrent(request):
             unlink(tf)
         else:
             for url in request.POST['torrentUrls'].split("\n"):
-                try:
-                    tc.add_torrent(url)
-                except:
-                    pass
+            #    try:
+                tc.add_torrent(url)
+            #    except:
+            #        pass
 
         return redirect('/')
     else:
@@ -157,89 +156,30 @@ def api_add_torrent(request):
             }), content_type='application/json'
         )
 
-
-@login_required
-def api_filter(request):
-    """
-    Search for torrens with their names
-    """
-    tc = transmissionrpc.Client(
-        settings.TRANSMISSION['default']['HOST'],
-        port=settings.TRANSMISSION['default']['PORT'],
-        user=settings.TRANSMISSION['default']['USER'],
-        password=settings.TRANSMISSION['default']['PASSWORD'])
-
-    filter = request.GET.get('query', '')
-    data = {}
-    for t in Torrent.objects.filter(name__icontains=filter):
-        rpc = tc.get_torrent(t.hash)
-        data[t.hash] = {
-            'hash': t.hash,
-            'name': t.name,
-            'status': rpc.status,
-            'progress': rpc.progress,
-            'recheckProgress': rpc.recheckProgress * 100,
-        }
-
-    for f in File.objects.filter(filename__icontains=filter):
-        rpc = tc.get_torrent(f.torrent.hash)
-        data[f.torrent.hash] = {
-            'hash': f.torrent.hash,
-            'name': f.torrent.name,
-            'status': rpc.status,
-            'progress': rpc.progress,
-            'recheckProgress': rpc.recheckProgress * 100,
-        }
-
-    return HttpResponse(
-        content=dumps(data),
-        content_type='application/json'
-    )
-
-
 @login_required
 def api_list(request):
     """
     List all torrents
     """
-    tc = transmissionrpc.Client(
-        settings.TRANSMISSION['default']['HOST'],
-        port=settings.TRANSMISSION['default']['PORT'],
-        user=settings.TRANSMISSION['default']['USER'],
-        password=settings.TRANSMISSION['default']['PASSWORD'])
-
     filter = request.GET.get('filter', '')
+    torrents = Torrent.objects.filter(
+        name__icontains=filter).order_by(
+        '-created')
 
-    rpclist = tc.get_torrents()
-    data = {}
-    for t in rpclist:
-        torrent, created = Torrent.objects.get_or_create(
-            hash=t.hashString
-        )
-        if created:
-            torrent.name = t.name
-            torrent.save()
-
-        data[t.hashString] = {
-            'hash': t.hashString,
+    data = []
+    for t in torrents:
+        data.append({
+            'hash': t.hash,
             'name': t.name,
             'status': t.status,
             'progress': t.progress,
-            'recheckProgress': t.recheckProgress * 100,
-        }
-
-    for t in Torrent.objects.all():
-        try:
-            data[t.hash]['name'] = t.name
-        except KeyError:
-            t.delete()
-            del(data[t.hash])
+            'recheckProgress': t.progress,
+        })
 
     return HttpResponse(
         content=dumps(data),
         content_type='application/json'
     )
-
 
 def download(request, hardlink):
     """
@@ -285,7 +225,6 @@ def download(request, hardlink):
 
     return response
 
-
 @login_required
 def file(request, file):
     """
@@ -305,7 +244,6 @@ def file(request, file):
             'path': settings.HARDLINK_URL
         },
         context_instance=RequestContext(request))
-
 
 @login_required
 def hardlink(request, file):
@@ -347,7 +285,6 @@ def hardlink(request, file):
         }), content_type='application/json'
     )
 
-
 @login_required
 def index(request):
     """
@@ -357,7 +294,6 @@ def index(request):
         'transmission/list.html',
         {'nav': 'transmission'},
         context_instance=RequestContext(request))
-
 
 def view_login(request):
     """
@@ -386,7 +322,6 @@ def view_login(request):
         return render_to_response(
             'transmission/login.html',
             context_instance=RequestContext(request))
-
 
 @login_required
 def view_logout(request):

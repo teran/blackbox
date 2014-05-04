@@ -12,7 +12,6 @@ urlpatterns = patterns(
     (r'^hardlink\/(?P<file>[0-9]+)$', 'transmission.views.hardlink'),
     (r'^login$', 'transmission.views.view_login'),
     (r'^logout$', 'transmission.views.view_logout'),
-    (r'^api\/transmission\/filter$', 'transmission.views.api_filter'),
     (r'^api\/transmission\/list$', 'transmission.views.api_list'),
     (r'^api\/transmission\/add$', 'transmission.views.api_add_torrent'),
     (r'^api\/transmission\/(?P<hash>[0-9a-f]{40})\/' +

@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -13,8 +14,16 @@ class Group(models.Model):
 class Torrent(models.Model):
     hash = models.CharField(max_length=40)
     name = models.CharField(max_length=255)
-    group = models.ForeignKey(Group, related_name='torrents',
-                              null=True, blank=True)
+    group = models.ForeignKey(
+        Group, related_name='torrents',
+        null=True, blank=True)
+    status = models.CharField(max_length=32, default=None, null=True)
+    progress = models.IntegerField(
+        max_length=3, default=0,
+        null=True, blank=True)
+    created = models.DateTimeField(
+        default=datetime.datetime.now(),
+        auto_now_add=True)
 
     def __unicode__(self):
         return self.name
@@ -23,6 +32,9 @@ class Torrent(models.Model):
 class File(models.Model):
     filename = models.CharField(max_length=255)
     torrent = models.ForeignKey(Torrent, related_name='files')
+    created = models.DateTimeField(
+        default=datetime.datetime.now(),
+        auto_now_add=True)
 
     def __unicode__(self):
         return self.filename
